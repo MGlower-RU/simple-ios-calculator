@@ -1,0 +1,18 @@
+@import 'reset';
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+
+:root {
+  --white: rgb(255, 255, 255);
+  --black: rgb(28, 28, 28);
+  --gray-dark: rgb(80, 80, 80);
+  --gray: rgb(212, 212, 210);
+  --orange: rgb(255, 149, 0);
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
