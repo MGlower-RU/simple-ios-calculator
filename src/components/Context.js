@@ -86,6 +86,7 @@ export default function Context(props) {
   const [op, setOp] = useState('')
   const [isTotal, setIsTotal] = useState(false)
   const [newValue, setNewValue] = useState('0')
+  const [percentedNewValue, setPercentedNewValue] = useState('')
   const [error, setError] = useState('')
   let [total, dispatch] = useReducer(reducer, '0')
   
@@ -97,7 +98,9 @@ export default function Context(props) {
         if(action.type === 'opposite') {
           setNewValue(val => -Number(val))
         } else if(action.type === 'dot') {
-          setNewValue(val => val + '.')
+          if(!newValue.includes('.')) setNewValue(val => val + '.')
+        } else if(action.type === 'percent') {
+          if(percentedNewValue === '') setPercentedNewValue((+newValue))
         } else {
           if(newValue === '0') {
             setNewValue(action.number)
@@ -109,7 +112,9 @@ export default function Context(props) {
         if(action.type === 'opposite') {
           total = -Number(total)
         } else if(action.type === 'dot') {
-          total += '.'
+          if(!total.includes('.')) total += '.'
+        } else if(action.type === 'percent') {
+          total /= 100
         } else {
           if(total === '0') {
             total = action.number
@@ -133,23 +138,41 @@ export default function Context(props) {
       case 'plus':
         setOp('')
         setNewValue('0')
+        setPercentedNewValue('')
+
+        if(percentedNewValue !== '') {
+          return total += total/100*percentedNewValue
+        }
         return total = Number(total) + Number(newValue);
       case 'minus':
         setOp('')
         setNewValue('0')
+        setPercentedNewValue('')
+
+        if(percentedNewValue !== '') {
+          return total -= total/100*percentedNewValue
+        }
         return total = Number(total) - Number(newValue);
       case 'divide':
         setOp('')
         setNewValue('0')
+        setPercentedNewValue('')
 
         if(newValue === '0') {
           setError('error')
           return total = '0'
+        } else if(percentedNewValue !== '') {
+          return total /= percentedNewValue/100
         }
         return total = Number(total) / Number(newValue);
       case 'multiply':
         setOp('')
         setNewValue('0')
+        setPercentedNewValue('')
+
+        if(percentedNewValue !== '') {
+          return total *= percentedNewValue/100
+        }
         return total = Number(total) * Number(newValue);
       case 'percent':
         setOp('')
@@ -158,6 +181,7 @@ export default function Context(props) {
       default:
         setNewValue('0')
         setOp('')
+        setPercentedNewValue('')
         return total = '0'
     }
   }

@@ -25,6 +25,8 @@ export default function Buttons() {
         dispatch({type: 'opposite'})
       } else if(e.target.dataset.name === 'dot') {
         dispatch({type: 'dot'})
+      } else if(e.target.dataset.name === 'percent') {
+        dispatch({type: 'percent'})
       } else {
         if(newValue === '0') {
           setOp(e.target.dataset.name)
