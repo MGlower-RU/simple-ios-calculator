@@ -92,12 +92,26 @@
   }
 }
 
-@media(max-width: 768px) {
-  .total {    
+@media only screen and (max-width: 768px) {
+  .total {
     span {
       &::-webkit-scrollbar {
         display: none;
       }
+    }
+  }
+}
+
+@media(max-width: 425px) {
+  .buttons__wrapper {
+    grid-auto-rows: min-content;
+    gap: 1.2rem;
+    padding: 1.2rem;
+  }
+
+  .button {
+    &:not([data-name='0']) {
+      aspect-ratio: 1/1;
     }
   }
 }
