@@ -7,7 +7,6 @@ export default function Buttons() {
     setOp,
     op,
     newValue,
-    total,
     setIsTotal,
     dispatch
   } = useContext(CalcContext)
@@ -15,15 +14,21 @@ export default function Buttons() {
   function handleClick(e) {
     if(isNaN(Number(e.target.dataset.name))) {
       if(e.target.dataset.name === 'total') {
-        if(newValue !== '0' && total !== '0' && op !== '') {
+        if(op !== '') {
           setIsTotal(true)
           dispatch()
         }
       } else if(e.target.dataset.name === 'clear') {
         setOp(e.target.dataset.name)
         dispatch()
+      } else if(e.target.dataset.name === 'opposite') {
+        dispatch({type: 'opposite'})
+      } else if(e.target.dataset.name === 'dot') {
+        dispatch({type: 'dot'})
       } else {
-        setOp(e.target.dataset.name)
+        if(newValue === '0') {
+          setOp(e.target.dataset.name)
+        }
       }
     } else {
       dispatch({number: e.target.dataset.name})

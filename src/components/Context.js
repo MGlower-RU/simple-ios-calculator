@@ -86,30 +86,48 @@ export default function Context(props) {
   const [op, setOp] = useState('')
   const [isTotal, setIsTotal] = useState(false)
   const [newValue, setNewValue] = useState('0')
-  const [total, dispatch] = useReducer(reducer, '0')
-
+  const [error, setError] = useState('')
+  let [total, dispatch] = useReducer(reducer, '0')
+  
   function reducer(total, action) {
+    setError('')
+
     if(action) {
       if(op) {
-        if(newValue === '0') {
-          setNewValue(action.number)
+        if(action.type === 'opposite') {
+          setNewValue(val => -Number(val))
+        } else if(action.type === 'dot') {
+          setNewValue(val => val + '.')
         } else {
-          setNewValue(val => String(val) + action.number)
+          if(newValue === '0') {
+            setNewValue(action.number)
+          } else {
+            setNewValue(val => String(val) + action.number)
+          }
         }
       } else {
-        if(total === '0') {
-          total = action.number
+        if(action.type === 'opposite') {
+          total = -Number(total)
+        } else if(action.type === 'dot') {
+          total += '.'
         } else {
-          total = String(total) + action.number;
+          if(total === '0') {
+            total = action.number
+          } else {
+            total = String(total) + action.number;
+          }
         }
       }
       return total
     }
+
     if(op === 'clear') {
       setNewValue('0')
       setOp('')
       return total = '0'
-    } else if(op === '' || !isTotal) {return}
+    } else if(op === '' || !isTotal) {
+      return total='0'
+    }
 
     switch (op) {
       case 'plus':
@@ -123,27 +141,23 @@ export default function Context(props) {
       case 'divide':
         setOp('')
         setNewValue('0')
+
+        if(newValue === '0') {
+          setError('error')
+          return total = '0'
+        }
         return total = Number(total) / Number(newValue);
       case 'multiply':
         setOp('')
         setNewValue('0')
         return total = Number(total) * Number(newValue);
-      case 'opposite':
-        setOp('')
-        setNewValue('0')
-        return total *= -1;
       case 'percent':
         setOp('')
         setNewValue('0')
         return total /= 100;
-      case 'dot':
-        setOp('')
-        setNewValue('0')
-        return total = `${total}.`;
       default:
         setNewValue('0')
         setOp('')
-        setNewValue('0')
         return total = '0'
     }
   }
@@ -158,7 +172,9 @@ export default function Context(props) {
       newValue,
       setNewValue,
       buttonsArray,
-      setIsTotal
+      setIsTotal,
+      error,
+      setError
     }}>
       {props.children}
     </CalcContext.Provider>
