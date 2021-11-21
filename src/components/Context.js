@@ -134,6 +134,8 @@ export default function Context(props) {
       return total='0'
     }
 
+    total = Number(total)
+
     switch (op) {
       case 'plus':
         setOp('')
@@ -143,7 +145,7 @@ export default function Context(props) {
         if(percentedNewValue !== '') {
           return total += total/100*percentedNewValue
         }
-        return total = Number(total) + Number(newValue);
+        return total += Number(newValue);
       case 'minus':
         setOp('')
         setNewValue('0')
@@ -152,7 +154,7 @@ export default function Context(props) {
         if(percentedNewValue !== '') {
           return total -= total/100*percentedNewValue
         }
-        return total = Number(total) - Number(newValue);
+        return total -= Number(newValue);
       case 'divide':
         setOp('')
         setNewValue('0')
@@ -164,7 +166,7 @@ export default function Context(props) {
         } else if(percentedNewValue !== '') {
           return total /= percentedNewValue/100
         }
-        return total = Number(total) / Number(newValue);
+        return total /= Number(newValue);
       case 'multiply':
         setOp('')
         setNewValue('0')
@@ -173,11 +175,7 @@ export default function Context(props) {
         if(percentedNewValue !== '') {
           return total *= percentedNewValue/100
         }
-        return total = Number(total) * Number(newValue);
-      case 'percent':
-        setOp('')
-        setNewValue('0')
-        return total /= 100;
+        return total *= Number(newValue);
       default:
         setNewValue('0')
         setOp('')
